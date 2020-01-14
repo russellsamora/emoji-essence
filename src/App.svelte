@@ -17,7 +17,7 @@
 
     const chars = [...i];
     const exp = chars.map(d => `.*${d}`).join("");
-    const reg = new RegExp(exp);
+    const reg = new RegExp(exp, "i");
     const filtered = emojiData.filter(
       d => flagCheck(d) && reg.test(d.shortname)
     );
@@ -47,7 +47,7 @@
     top.marked = chars.reduce((prev, cur) => {
       const pre = prev.str.substring(0, prev.index);
       const after = prev.str.substring(prev.index, prev.str.length);
-      const end = after.indexOf(cur);
+      const end = after.toLowerCase().indexOf(cur);
       const inject = after.substring(0, end);
       const post = after.substring(end + 1);
 
@@ -63,7 +63,7 @@
     const input = this.value.replace(/\W/g, "");
     if (!input.length) prev = null;
 
-    const output = getEmoji(input) || prev;
+    const output = getEmoji(input.toLowerCase()) || prev;
 
     if (output) {
       emoji = output.browser;
