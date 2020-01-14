@@ -33,14 +33,16 @@
 	<link rel='stylesheet' href='./global.css'>
 	<link rel='stylesheet' href='./build/bundle.css'>
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37736972-8"></script>
 	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
+		(function () {
+			var script = document.createElement('script');
+			window.counter = 'https://russellgoldenberg_github_io.goatcounter.com/count'
+			script.async = 1;
+			script.src = '//gc.zgo.at/count.js';
 
-		gtag('config', 'UA-37736972-8');
+			var ins = document.getElementsByTagName('script')[0];
+			ins.parentNode.insertBefore(script, ins)
+		})();
 	</script>
 
 	<script defer src='./build/bundle.js'></script>
