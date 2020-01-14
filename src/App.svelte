@@ -5,11 +5,29 @@
   let emoji = null;
   let name = null;
   let visible = false;
-  let includeFlags = false;
 
-  function flagCheck(d) {
-    if (includeFlags) return true;
-    return !d.shortname.includes("flag:");
+  function createMark(prev, cur) {
+    const pre = prev.str.substring(0, prev.index);
+    const after = prev.str.substring(prev.index, prev.str.length);
+    const end = after.toLowerCase().indexOf(cur);
+    const inject = after.substring(0, end);
+    const post = after.substring(end + 1);
+
+    const str = `${pre}${inject}<mark>${cur}</mark>${post}`;
+    const index = str.length - post.length;
+    return { str, index };
+  }
+
+  function createConsecutive(prev, cur) {
+    const pre = prev.str.substring(0, prev.index);
+    const after = prev.str.substring(prev.index, prev.str.length);
+    const end = after.toLowerCase().indexOf(cur);
+    const inject = after.substring(0, end);
+    const post = after.substring(end + 1);
+
+    const str = `${pre}${inject}~${post}`;
+    const index = str.length - post.length;
+    return { str, index };
   }
 
   function getEmoji(i) {
@@ -18,43 +36,43 @@
     const chars = [...i];
     const exp = chars.map(d => `.*${d}`).join("");
     const reg = new RegExp(exp, "i");
-    const filtered = emojiData.filter(
-      d => flagCheck(d) && reg.test(d.shortname)
-    );
+    const filtered = emojiData.filter(d => reg.test(d.shortname));
 
     if (!filtered.length) return null;
 
-    console.log(filtered.slice(0, 5));
-    const withLength = filtered.map(d => {
+    const withProps = filtered.map(d => {
       const { shortname } = d;
       const [match] = shortname.match(reg);
       const start = shortname.indexOf(chars[0]);
       const end = match.length;
       const sub = shortname.substring(start, end);
       const len = sub.length;
-      return { ...d, len };
+      const r = { str: shortname, index: 0 };
+      const con = Math.max(
+        ...chars
+          .reduce(createConsecutive, r)
+          .str.match(/(~+)/g, "")
+          .map(v => v.length)
+      );
+      return { ...d, len, con };
     });
 
-    withLength.sort((a, b) => {
-      const n = a.len - b.len;
+    withProps.sort((a, b) => {
+      // most consequetive
+      const c = a.con - b.con;
+      if (c !== 0) return c;
+      // shortest total
+      const n = b.len - a.len;
       if (n !== 0) return n;
-
-      return +a.number - +b.number;
+      // lowest index
+      return +b.number - +a.number;
     });
 
-    const top = withLength.pop();
-    const start = { str: top.shortname, index: 0 };
-    top.marked = chars.reduce((prev, cur) => {
-      const pre = prev.str.substring(0, prev.index);
-      const after = prev.str.substring(prev.index, prev.str.length);
-      const end = after.toLowerCase().indexOf(cur);
-      const inject = after.substring(0, end);
-      const post = after.substring(end + 1);
+    console.table(withProps);
 
-      const str = `${pre}${inject}<mark>${cur}</mark>${post}`;
-      const index = str.length - post.length;
-      return { str, index };
-    }, start).str;
+    const top = withProps.pop();
+    const r = { str: top.shortname, index: 0 };
+    top.marked = chars.reduce(createMark, r).str;
 
     return top;
   }
@@ -131,7 +149,7 @@
     text-align: center;
     font-size: 0.75em;
     color: #666;
-    max-width: 20rem;
+    max-width: 19rem;
     margin: 1rem auto;
   }
 
@@ -175,12 +193,12 @@
   </p>
 
   <p class="source">
+    Finds the closest match of your name within an emoji's CLDR Short Name.
     Excludes country flags and ones that don't render in browsers.
     <a
       target="_blank"
       href="https://unicode.org/emoji/charts/full-emoji-list.html">
       Emoji data source
     </a>
-    .
   </p>
 </main>
