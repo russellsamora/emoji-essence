@@ -175,11 +175,12 @@
   </p>
 
   <p class="source">
+    Excludes country flags and ones that don't render in browsers.
     <a
       target="_blank"
       href="https://unicode.org/emoji/charts/full-emoji-list.html">
-      Emoji data source.
+      Emoji data source
     </a>
-    Excludes country flags and ones that don't render in browsers.
+    .
   </p>
 </main>
