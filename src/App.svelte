@@ -127,6 +127,14 @@
     margin-top: 4rem;
   }
 
+  p.source {
+    text-align: center;
+    font-size: 0.75em;
+    color: #666;
+    max-width: 20rem;
+    margin: 1rem auto;
+  }
+
   @media (min-width: 640px) {
     h1 {
       font-size: 3em;
@@ -140,8 +148,13 @@
     p.emoji {
       font-size: 8em;
     }
+
     p.credit {
       font-size: 1em;
+    }
+
+    p.source {
+      font-size: 0.75em;
     }
   }
 </style>
@@ -159,5 +172,14 @@
   <p class="credit">
     Created by
     <a href="https://twitter.com/codenberg">@codenberg</a>
+  </p>
+
+  <p class="source">
+    <a
+      target="_blank"
+      href="https://unicode.org/emoji/charts/full-emoji-list.html">
+      Emoji data source.
+    </a>
+    Excludes country flags and ones that don't render in browsers.
   </p>
 </main>
