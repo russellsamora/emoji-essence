@@ -1,0 +1,24 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	color: #2a2a2a;
+	font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+	font-weight: 500;
+}
+
+input {
+	font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+}
+
+h1, h2, h3, p {
+	font-weight: 500;
+}
+
+mark {
+	border-bottom: 2px solid #ccc;
+	background: transparent;
+}
