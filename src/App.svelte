@@ -68,8 +68,6 @@
       return +b.number - +a.number;
     });
 
-    console.table(withProps);
-
     const top = withProps.pop();
     const r = { str: top.shortname, index: 0 };
     top.marked = chars.reduce(createMark, r).str;
