@@ -96,6 +96,7 @@
     margin: 2rem auto;
     padding: 0.25em;
     max-width: 30rem;
+    text-align: center;
   }
 
   div.output {
@@ -103,8 +104,8 @@
   }
 
   p.emoji {
-    font-size: 4em;
-    margin: 0;
+    font-size: 6em;
+    margin: 1rem 0;
     text-align: center;
     line-height: 1;
   }
