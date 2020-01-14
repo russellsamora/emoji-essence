@@ -1,5 +1,4 @@
 <script>
-  import * as d3 from "d3";
   import emojiData from "./emojis";
   export let title;
   let prev = null;
@@ -25,6 +24,7 @@
 
     if (!filtered.length) return null;
 
+    console.log(filtered.slice(0, 5));
     const withLength = filtered.map(d => {
       const { shortname } = d;
       const [match] = shortname.match(reg);
@@ -35,8 +35,12 @@
       return { ...d, len };
     });
 
-    withLength.sort((a, b) => d3.descending(a.len, b.len)) ||
-      d3.descending(+a.number, +b.number);
+    withLength.sort((a, b) => {
+      const n = a.len - b.len;
+      if (n !== 0) return n;
+
+      return +a.number - +b.number;
+    });
 
     const top = withLength.pop();
     const start = { str: top.shortname, index: 0 };
@@ -46,7 +50,6 @@
       const end = after.indexOf(cur);
       const inject = after.substring(0, end);
       const post = after.substring(end + 1);
-      console.log({ pre, after, end, inject, post });
 
       const str = `${pre}${inject}<mark>${cur}</mark>${post}`;
       const index = str.length - post.length;
@@ -117,6 +120,12 @@
     visibility: visible;
   }
 
+  p.credit {
+    text-align: center;
+    font-size: 1em;
+    margin-top: 4rem;
+  }
+
   @media (min-width: 640px) {
     h1 {
       font-size: 3em;
@@ -130,6 +139,9 @@
     p.emoji {
       font-size: 8em;
     }
+    p.credit {
+      font-size: 1em;
+    }
   }
 </style>
 
@@ -142,4 +154,9 @@
       {@html name}
     </p>
   </div>
+
+  <p class="credit">
+    Created by
+    <a href="https://twitter.com/codenberg">@codenberg</a>
+  </p>
 </main>
